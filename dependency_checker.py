@@ -33,3 +33,12 @@ def find_version_mismatches(requirements, installed_packages):
             })
 
     return mismatches
+
+def find_undeclared_packages(requirements, installed_packages):
+    undeclared = []
+
+    for package_name in installed_packages:
+        if package_name not in requirements:
+            undeclared.append(package_name)
+
+    return undeclared
