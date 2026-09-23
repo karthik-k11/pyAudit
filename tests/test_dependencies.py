@@ -1,4 +1,4 @@
-from dependency_checker import find_missing_dependencies
+from dependency_checker import find_missing_dependencies, find_version_mismatches, find_undeclared_packages
 
 
 def test_missing_dependencies():
@@ -17,3 +17,22 @@ def test_missing_dependencies():
     )
 
     assert missing == ["pandas"]
+
+def test_undeclared_packages():
+    requirements = {
+        "flask": "==3.1.3",
+        "pytest": "==9.1.1",
+    }
+
+    installed_packages = {
+        "flask": "3.1.3",
+        "pytest": "9.1.1",
+        "colorama": "0.4.6",
+    }
+
+    undeclared = find_undeclared_packages(
+        requirements,
+        installed_packages
+    )
+
+    assert undeclared == ["colorama"]
