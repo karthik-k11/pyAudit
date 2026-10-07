@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>PyAudit</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="brand">PyAudit</div>
+
+        <div class="subtitle">
+            Python Environment & Dependency Audit
+        </div>
+    </header>
+
+    <section class="audit-form">
+
+        <form method="POST">
+
+            <label
+                class="form-label"
+                for="project_path"
+            >
+                PROJECT PATH
+            </label>
+
+            <div class="form-row">
+
+                <input
+                    type="text"
+                    id="project_path"
+                    name="project_path"
+                    placeholder="C:\Projects\MyProject"
+                    required
+                >
+
+                <button type="submit">
+                    Run Audit
+                </button>
+
+            </div>
+
+        </form>
+
+        {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+    </section>
+
+    {% if audit_result %}
+
+        <h2 class="section-title">
+            Environment
+        </h2>
+
+        <div class="environment">
+
+            <div class="environment-item">
+                <span>Python Version</span>
+                {{ audit_result.environment.python_version }}
+            </div>
+
+            <div class="environment-item">
+                <span>Operating System</span>
+                {{ audit_result.environment.operating_system }}
+            </div>
+
+            <div class="environment-item">
+                <span>Virtual Environment</span>
+
+                {{
+                    "Detected"
+                    if audit_result.environment.virtual_environment
+                    else "Not detected"
+                }}
+            </div>
+
+            <div class="environment-item">
+                <span>Environment Path</span>
+
+                {{
+                    audit_result.environment.virtual_environment_path
+                    or "N/A"
+                }}
+            </div>
+
+        </div>
+
+
+        <h2 class="section-title">
+            Dependency Overview
+        </h2>
+
+        <div class="grid">
+
+            <div class="card">
+                <div class="card-label">
+                    Total
+                </div>
+
+                <div class="card-value">
+                    {{ audit_result.total_dependencies }}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">
+                    Missing
+                </div>
+
+                <div class="card-value">
+                    {{ audit_result.missing_dependencies | length }}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">
+                    Mismatched
+                </div>
+
+                <div class="card-value">
+                    {{ audit_result.version_mismatches | length }}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">
+                    Undeclared
+                </div>
+
+                <div class="card-value">
+                    {{ audit_result.undeclared_packages | length }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <h2 class="section-title">
+            Environment Health
+        </h2>
+
+        <div class="health-card">
+
+            <div class="health-score">
+                {{ audit_result.health.score }} / 100
+            </div>
+
+            <div class="health-status">
+                {{ audit_result.health.status }}
+            </div>
+
+        </div>
+
+
+        <h2 class="section-title">
+            Import Checks
+        </h2>
+
+        <div class="issue-list">
+
+            {% for package, available in audit_result.import_checks.items() %}
+
+                <div class="issue">
+
+                    {% if available %}
+                        ✓ {{ package }} — Import available
+                    {% else %}
+                        ✗ {{ package }} — Import failed
+                    {% endif %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty">
+                    No import checks available.
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <h2 class="section-title">
+            Undeclared Packages
+        </h2>
+
+        <div class="issue-list">
+
+            {% if audit_result.undeclared_packages %}
+
+                {% for package in audit_result.undeclared_packages %}
+
+                    <div class="issue warning">
+                        ⚠ {{ package }}
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty">
+                    No undeclared packages detected.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <h2 class="section-title">
+            Issues
+        </h2>
+
+        <div class="issue-list">
+
+            {% for package in audit_result.missing_dependencies %}
+
+                <div class="issue error">
+                    ✗ Missing dependency: {{ package }}
+                </div>
+
+            {% endfor %}
+
+
+            {% for mismatch in audit_result.version_mismatches %}
+
+                <div class="issue warning">
+
+                    ⚠ {{ mismatch.package }}
+
+                    — Required:
+                    {{ mismatch.required }}
+
+                    — Installed:
+                    {{ mismatch.installed }}
+
+                </div>
+
+            {% endfor %}
+
+
+            {% for package in audit_result.import_failures %}
+
+                <div class="issue error">
+                    ✗ Import failed: {{ package }}
+                </div>
+
+            {% endfor %}
+
+
+            {% for item in audit_result.invalid_requirements %}
+
+                <div class="issue error">
+
+                    ✗ Invalid requirement on line
+                    {{ item.line }}:
+                    {{ item.value }}
+
+                </div>
+
+            {% endfor %}
+
+
+            {% if not audit_result.missing_dependencies
+                and not audit_result.version_mismatches
+                and not audit_result.import_failures
+                and not audit_result.invalid_requirements %}
+
+                <div class="empty">
+                    No critical dependency issues detected.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <h2 class="section-title">
+            Full Audit Report
+        </h2>
+
+        <pre class="report">{{ report }}</pre>
+
+
+        <section class="audit-form">
+
+            <a href="/history">
+                View Audit History →
+            </a>
+
+        </section>
+
+    {% endif %}
+
+
+    {% if not audit_result %}
+
+        <section class="audit-form">
+
+            <a href="/history">
+                View Audit History →
+            </a>
+
+        </section>
+
+    {% endif %}
+
+
+    <footer>
+        PyAudit — Local Python Environment & Dependency Audit Tool
+    </footer>
+
+</div>
+
+</body>
+</html>

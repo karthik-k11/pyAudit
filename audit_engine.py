@@ -6,13 +6,17 @@ from dependency_checker import (
     find_version_mismatches,
     find_undeclared_packages,
 )
+from import_checker import check_import
 from health_score import calculate_health_score
 
 
 def run_audit(requirements_file):
     environment = get_environment_info()
     installed_packages = get_installed_packages()
-    requirements = parse_requirements(requirements_file)
+
+    requirements, invalid_requirements = parse_requirements(
+        requirements_file
+    )
 
     missing = find_missing_dependencies(
         requirements,
@@ -29,9 +33,22 @@ def run_audit(requirements_file):
         installed_packages,
     )
 
+    import_checks = {}
+
+    for package_name in requirements:
+        import_checks[package_name] = check_import(package_name)
+
+    import_failures = [
+        package_name
+        for package_name, available in import_checks.items()
+        if not available
+    ]
+
     health = calculate_health_score(
         missing_count=len(missing),
         mismatch_count=len(mismatches),
+        import_failure_count=len(import_failures),
+        invalid_requirement_count=len(invalid_requirements),
     )
 
     return {
@@ -40,5 +57,8 @@ def run_audit(requirements_file):
         "missing_dependencies": missing,
         "version_mismatches": mismatches,
         "undeclared_packages": undeclared,
+        "import_checks": import_checks,
+        "import_failures": import_failures,
+        "invalid_requirements": invalid_requirements,
         "health": health,
     }

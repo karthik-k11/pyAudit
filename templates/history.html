@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyAudit - Audit History</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="brand">PyAudit</div>
+        <div class="subtitle">
+            Audit History
+        </div>
+    </header>
+
+    <section class="audit-form">
+        <a href="/">← Back to Dashboard</a>
+    </section>
+
+    <h2 class="section-title">Previous Audits</h2>
+
+    {% if audits %}
+
+        {% for audit in audits %}
+
+            <div class="card" style="margin-bottom: 10px;">
+
+                <div class="card-label">
+                    {{ audit[1] }}
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <strong>Audit Time:</strong>
+                    {{ audit[2] }}
+                </div>
+
+                <div style="margin-top: 8px;">
+                    Python {{ audit[3] }}
+                </div>
+
+                <div style="margin-top: 8px;">
+                    Dependencies: {{ audit[4] }}
+                    |
+                    Missing: {{ audit[5] }}
+                    |
+                    Mismatched: {{ audit[6] }}
+                    |
+                    Undeclared: {{ audit[7] }}
+                </div>
+
+                <div style="margin-top: 12px; font-size: 22px;">
+                    {{ audit[8] }} / 100
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+            No audits have been recorded yet.
+        </div>
+
+    {% endif %}
+
+    <footer>
+        PyAudit — Local Python Environment & Dependency Audit Tool
+    </footer>
+
+</div>
+
+</body>
+</html>

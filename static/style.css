@@ -1,0 +1,239 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #111315;
+    color: #e7e9ea;
+}
+
+.container {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+}
+
+header {
+    padding: 32px 0 24px;
+    border-bottom: 1px solid #2b2f33;
+}
+
+.brand {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    margin-top: 6px;
+    color: #92989f;
+    font-size: 14px;
+}
+
+.audit-form {
+    margin: 28px 0;
+    padding: 22px;
+    background: #191c1f;
+    border: 1px solid #2b2f33;
+    border-radius: 10px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #b8bdc2;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+}
+
+.form-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    background: #101214;
+    color: #f1f3f4;
+    border: 1px solid #363b40;
+    border-radius: 7px;
+    outline: none;
+}
+
+.form-row input:focus {
+    border-color: #7f8790;
+}
+
+button {
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 7px;
+    background: #e7e9ea;
+    color: #111315;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #ffffff;
+}
+
+.error {
+    margin-top: 14px;
+    padding: 12px;
+    background: #291a1a;
+    border: 1px solid #593333;
+    border-radius: 7px;
+    color: #ffb4b4;
+}
+
+.section-title {
+    margin: 30px 0 14px;
+    font-size: 16px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.card {
+    padding: 18px;
+    background: #191c1f;
+    border: 1px solid #2b2f33;
+    border-radius: 10px;
+}
+
+.card-label {
+    color: #8f969d;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.card-value {
+    margin-top: 8px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.health-card {
+    padding: 24px;
+    background: #191c1f;
+    border: 1px solid #2b2f33;
+    border-radius: 10px;
+}
+
+.health-score {
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.health-status {
+    margin-top: 5px;
+    color: #9da4aa;
+}
+
+.issue-list {
+    margin-bottom: 40px;
+}
+
+.issue {
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    background: #191c1f;
+    border: 1px solid #2b2f33;
+    border-radius: 8px;
+}
+
+.issue.warning {
+    border-left: 3px solid #c5a85a;
+}
+
+.issue.error {
+    border-left: 3px solid #c75c5c;
+}
+
+.empty {
+    padding: 18px;
+    color: #8f969d;
+    background: #191c1f;
+    border: 1px solid #2b2f33;
+    border-radius: 8px;
+}
+
+.environment {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.environment-item {
+    padding: 14px;
+    background: #191c1f;
+    border: 1px solid #2b2f33;
+    border-radius: 8px;
+}
+
+.environment-item span {
+    display: block;
+    color: #8f969d;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+footer {
+    padding: 30px 0;
+    color: #676e75;
+    font-size: 12px;
+    border-top: 1px solid #2b2f33;
+}
+
+@media (max-width: 800px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .environment {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+.report {
+    margin: 0;
+    padding: 20px;
+    background: #101214;
+    border: 1px solid #2b2f33;
+    border-radius: 10px;
+    color: #cdd2d7;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+a {
+    color: #cdd2d7;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+a:hover {
+    text-decoration: underline;
+}
