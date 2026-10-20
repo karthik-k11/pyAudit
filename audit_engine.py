@@ -1,22 +1,29 @@
-from environment_checker import get_environment_info
-from package_checker import get_installed_packages
-from requirements_parser import parse_requirements
 from dependency_checker import (
     find_missing_dependencies,
-    find_version_mismatches,
     find_undeclared_packages,
+    find_version_mismatches,
 )
-from import_checker import check_import
+from environment_checker import get_environment_info, resolve_python_interpreter
 from health_score import calculate_health_score
+from package_checker import inspect_python_packages
+from requirements_parser import parse_requirements
 
 
-def run_audit(requirements_file):
-    environment = get_environment_info()
-    installed_packages = get_installed_packages()
+def run_audit(requirements_file, project_directory=None):
+    python_executable, interpreter_source = resolve_python_interpreter(
+        project_directory
+    )
+    environment = get_environment_info(python_executable, interpreter_source)
 
     requirements, invalid_requirements = parse_requirements(
-        requirements_file
+        requirements_file,
+        environment,
     )
+    package_data = inspect_python_packages(
+        python_executable,
+        requirements,
+    )
+    installed_packages = package_data["installed"]
 
     missing = find_missing_dependencies(
         requirements,
@@ -33,10 +40,7 @@ def run_audit(requirements_file):
         installed_packages,
     )
 
-    import_checks = {}
-
-    for package_name in requirements:
-        import_checks[package_name] = check_import(package_name)
+    import_checks = package_data["imports"]
 
     import_failures = [
         package_name
@@ -53,6 +57,7 @@ def run_audit(requirements_file):
 
     return {
         "environment": environment,
+        "interpreter_source": interpreter_source,
         "total_dependencies": len(requirements),
         "missing_dependencies": missing,
         "version_mismatches": mismatches,
