@@ -3,7 +3,7 @@ from pathlib import Path
 from datetime import datetime
 
 
-DATABASE_PATH = Path("database") / "pyaudit.db"
+DATABASE_PATH = Path(__file__).resolve().parent / "database" / "pyaudit.db"
 
 
 def get_connection():
