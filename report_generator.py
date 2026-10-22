@@ -17,6 +17,7 @@ def generate_report(audit_result):
         f"Operating System: {environment['operating_system']}",
         f"Virtual Env    : {'Detected' if environment['virtual_environment'] else 'Not detected'}",
         f"Environment Path: {environment['virtual_environment_path']}",
+        f"Interpreter Source: {environment['interpreter_source']}",
         "",
         "Dependencies",
         f"Total          : {audit_result['total_dependencies']}",
