@@ -10,6 +10,7 @@ def test_run_audit():
     assert "version_mismatches" in result
     assert "undeclared_packages" in result
     assert "health" in result
+    assert "interpreter_source" in result["environment"]
 
     assert result["total_dependencies"] == 3
     assert result["missing_dependencies"] == []

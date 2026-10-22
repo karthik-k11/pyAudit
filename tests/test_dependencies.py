@@ -38,6 +38,18 @@ def test_undeclared_packages():
 
     assert undeclared == ["colorama"]
 
+def test_version_mismatch():
+    mismatches = find_version_mismatches(
+        {"flask": ">=3.0,<4.0"},
+        {"flask": "2.3.0"},
+    )
+
+    assert mismatches == [{
+        "package": "flask",
+        "required": ">=3.0,<4.0",
+        "installed": "2.3.0",
+    }]
+
 from import_checker import check_import
 
 
