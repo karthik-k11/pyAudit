@@ -33,14 +33,18 @@ def index():
                 error = "requirements.txt was not found in the project."
             else:
                 try:
-                    audit_result = run_audit(requirements_file)
+                    audit_result = run_audit(
+                        requirements_file,
+                        project_directory,
+                    )
                     report = generate_report(audit_result)
 
                     save_audit(
                         project_directory.name,
                         audit_result,
                     )
-                except Exception as exc:
+                except RuntimeError as exc:
+                    app.logger.warning("Audit could not be completed: %s", exc)
                     error = str(exc)
 
     return render_template(
@@ -62,4 +66,4 @@ def history():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
