@@ -1,7 +1,8 @@
 from packaging.requirements import InvalidRequirement, Requirement
+from packaging.utils import canonicalize_name
 
 
-def parse_requirements(file_path):
+def parse_requirements(file_path, environment=None):
     requirements = {}
     invalid_requirements = []
 
@@ -14,7 +15,11 @@ def parse_requirements(file_path):
 
             try:
                 requirement = Requirement(line)
-                requirements[requirement.name.lower()] = str(
+                if requirement.marker and not requirement.marker.evaluate(
+                    environment
+                ):
+                    continue
+                requirements[canonicalize_name(requirement.name)] = str(
                     requirement.specifier
                 )
             except InvalidRequirement:
