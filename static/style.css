@@ -47,6 +47,13 @@ header {
     color: #b8bdc2;
 }
 
+.form-hint {
+    margin: 10px 0 0;
+    color: #92989f;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
 .form-row {
     display: flex;
     gap: 10px;

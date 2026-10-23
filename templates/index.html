@@ -52,6 +52,10 @@
                 </button>
 
             </div>
+            <p class="form-hint">
+                PyAudit checks the project's .venv or venv when available.
+                Otherwise, it clearly reports that it is using PyAudit's environment.
+            </p>
 
         </form>
 
@@ -98,6 +102,11 @@
                     audit_result.environment.virtual_environment_path
                     or "N/A"
                 }}
+            </div>
+
+            <div class="environment-item">
+                <span>Audit Interpreter</span>
+                {{ audit_result.environment.interpreter_source }}
             </div>
 
         </div>
