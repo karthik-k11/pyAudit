@@ -20,7 +20,7 @@ PyAudit is a lightweight, local web application for auditing a Python project's 
 
 The diagram below illustrates PyAudit's workflow, from project path selection and environment inspection to dependency analysis, report generation, and audit history storage.
 
-![PyAudit Workflow Architecture](screenshots/pyaudit_Workflow.png)
+![PyAudit Workflow Architecture](screenshots/PyAudit_Workflow.png)
 
 ### Workflow Overview
 
